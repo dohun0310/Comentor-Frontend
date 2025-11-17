@@ -4,6 +4,7 @@ import type { ButtonProps } from "@/types/button";
 export function Button({
   size = "medium",
   className,
+  children,
   ...props
 }: ButtonProps) {
   return (
@@ -21,7 +22,7 @@ export function Button({
       )}
       {...props}
     >
-      {props.children}
+      {children}
     </button>
   );
 }
