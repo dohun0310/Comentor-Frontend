@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Radar,
   RadarChart,
@@ -99,6 +97,7 @@ export function RadarChartContent({
               fillOpacity={0.3}
               dot={index === 0 ? renderDot : false}
               activeDot={false}
+              isAnimationActive={false}
             />
           ))}
         </RadarChart>

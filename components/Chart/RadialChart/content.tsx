@@ -1,5 +1,3 @@
-"use client";
-
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -56,6 +54,7 @@ export function RadialChartContent({
             cornerRadius={999}
             barSize={16}
             fill={color}
+            isAnimationActive={false}
           />
           <PolarAngleAxis
             type="number"
