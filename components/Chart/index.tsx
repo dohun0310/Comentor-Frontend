@@ -144,7 +144,7 @@ export function RadialChartContent({
         aria-hidden="true"
       >
         <span
-          className="block h-28 w-28 rounded-full opacity-40 blur-3xl"
+          className="block h-28 w-28 rounded-full opacity-35 blur-3xl"
           style={{ backgroundColor: color }}
         />
       </div>
