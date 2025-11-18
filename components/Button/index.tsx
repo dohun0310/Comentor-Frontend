@@ -1,12 +1,11 @@
 import { cn } from "@/utils/cn";
-import type { ButtonProps } from "@/types/button";
 
 export function Button({
   size = "medium",
   className,
   children,
   ...props
-}: ButtonProps) {
+}: { size?: "medium" | "icon" } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
       className={cn(
