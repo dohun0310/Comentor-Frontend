@@ -5,10 +5,7 @@ import { Button } from "@/components/Button";
 
 export default function Home() {
   return (
-    <main
-      className="flex min-h-screen flex-col bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/background.png')" }}
-    >
+    <main className="relative flex min-h-screen flex-col">
       <Header />
       <div className="flex flex-col items-center gap-12.5 mx-auto mt-16 w-full max-w-[1380px]">
         <div className="flex flex-col items-center text-center gap-6 px-4 break-keep">
@@ -27,13 +24,25 @@ export default function Home() {
           </Button>
         </Link>
         <Image
+          src="/hero.png"
+          alt="Hero image"
           width={1380}
           height={780}
           sizes={"70vw"}
-          src="/hero.png"
-          alt="Hero image"
+          quality={100}
+          preload
+          className="w-full h-auto"
         />
       </div>
+      <Image
+        src="/background.png"
+        alt="Background image"
+        fill
+        sizes={"100vw"}
+        quality={100}
+        preload
+        className="pointer-events-none -z-10 object-cover object-center"
+      />
     </main>
   );
 }
