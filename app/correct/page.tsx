@@ -186,10 +186,13 @@ export default function Correct() {
 						당신의 온라인 편향성 분석
 					</h1>
 				</div>
-				<div className="flex flex-col items-start rounded-3xl mt-6">
+				<div
+          className="rounded-3xl mt-6 bg-background"
+          style={{ boxShadow: "-6px -5px 15px 0 rgba(0, 0, 0, 0.08);" }}
+        >
           <div className="max-w-[1350] w-full
-                          flex flex-col
-                          px-3 pb-3 bg-background"
+            flex flex-col
+            px-3 pb-3"
           >
             <div className="min-h-17 relative flex items-center text-center">
               <p className="flex-1 text-xl">
