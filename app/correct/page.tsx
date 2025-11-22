@@ -9,8 +9,9 @@ import { CommentCorrect } from "@/utils/correct";
 
 export default function Correct() {
   const searchParams = useSearchParams();
-
   const comment = searchParams.get("comment");
+  const returnPath = searchParams.get("returnPath");
+
   const initialValue = comment ?? "";
   const [history, setHistory] = useState<{ entries: string[]; index: number }>(() => ({
     entries: [initialValue],
@@ -318,7 +319,7 @@ export default function Correct() {
               "bg-blue-500 hover:bg-blue-600"}
             disabled={value === ""}
             onClick={() => {{
-              result && value === comment ? window.location.href = `/feedback?comment=${encodeURIComponent(value)}&result=${encodeURIComponent(result)}` :
+              result && value === comment ? window.location.href = `/feedback?comment=${encodeURIComponent(value)}&result=${encodeURIComponent(result)}${returnPath && `&returnPath=${encodeURIComponent(returnPath)}`}` :
               window.location.href = `/correct?comment=${encodeURIComponent(value)}`;
             }}}
           >
