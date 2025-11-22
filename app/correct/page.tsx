@@ -188,9 +188,9 @@ export default function Correct() {
 				</div>
 				<div
           className="rounded-3xl mt-6 bg-background"
-          style={{ boxShadow: "-6px -5px 15px 0 rgba(0, 0, 0, 0.08);" }}
+          style={{ boxShadow: "-6px -5px 15px 0 rgba(0, 0, 0, 0.08)" }}
         >
-          <div className="max-w-[1350] w-full
+          <div className="max-w-[1350px] w-full
             flex flex-col
             px-3 pb-3"
           >
@@ -238,20 +238,19 @@ export default function Correct() {
                 gap-2 p-8
                 ${comment === null && "border-t border-gray-300"}`}
               >
-                {isLoading && (
+                {isLoading ? (
                   <div className="flex flex-col w-full gap-2">
                     {[...Array(10)].map((_, index) => (
                       <div key={index} className="w-full h-5 bg-gray-200 animate-pulse" />
                     ))}
                   </div>
-                )}
-                {!isLoading && result && (
-                  <p className={`w-full h-full text-lg overflow-y-auto
-                    ${error && "text-center"}`}
-                  >
-                    {result ? result : error}
+                ) : error ? (
+                  <p className="m-auto text-center">{error}</p>
+                ) : result !== null ? (
+                  <p className={`w-full h-full text-lg overflow-y-auto`}>
+                    {result || "수정이 필요하지 않은 문장입니다."}
                   </p>
-                )}
+                ) : null}
               </div>
             </div>
             <div className="flex">
