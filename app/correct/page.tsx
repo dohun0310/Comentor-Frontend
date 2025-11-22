@@ -163,7 +163,7 @@ export default function Correct() {
 		<main className="relative flex min-h-screen flex-col bg-blue-100/20">
 			<div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_bottom,rgba(102,136,255,0.18),transparent_60%)]" />
 			<Header />
-			<section className="mx-auto w-full max-w-[1350px] 
+			<section className="mx-auto w-full max-w-[1350px]
         flex flex-col
         px-4 pb-16 pt-12"
       >
@@ -245,9 +245,15 @@ export default function Correct() {
                     ))}
                   </div>
                 ) : error ? (
-                  <p className="m-auto text-center">{error}</p>
+                  <p className="m-auto text-center">
+                    {error}
+                  </p>
                 ) : result !== null ? (
-                  <p className={`w-full h-full text-lg overflow-y-auto`}>
+                  <p className="relative w-full h-full text-lg overflow-y-auto
+                    text-transparent bg-clip-text bg-local
+                    bg-[linear-gradient(120deg,var(--foreground)_10%,var(--color-green-500)_25%,var(--color-purple-500)_50%,var(--color-blue-500)_75%,var(--foreground)_90%)]
+                    bg-size-[850%_auto] animate-wipe"
+                  >
                     {result || "수정이 필요하지 않은 문장입니다."}
                   </p>
                 ) : null}
