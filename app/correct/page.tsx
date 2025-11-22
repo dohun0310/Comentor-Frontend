@@ -312,7 +312,7 @@ export default function Correct() {
               "bg-blue-500 hover:bg-blue-600"}
             disabled={value === ""}
             onClick={() => {{
-              result && value === comment ? window.location.href = `/feedback?comment=${encodeURIComponent(value)}` :
+              result && value === comment ? window.location.href = `/feedback?comment=${encodeURIComponent(value)}&result=${encodeURIComponent(result)}` :
               window.location.href = `/correct?comment=${encodeURIComponent(value)}`;
             }}}
           >
