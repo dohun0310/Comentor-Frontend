@@ -10,12 +10,14 @@ export function Button({
     <button
       className={cn(
         size === "medium"
-          ? "w-54 h-15 p-4 rounded-[0.875rem]"
+          ? `w-54 h-15 p-4 rounded-[0.875rem]
+            bg-foreground text-background 
+            transition-colors hover:bg-gray-800`
           : size === "icon"
-          ? "h-6 w-6 p-2 rounded-sm"
+          ? `w-6 h-6 rounded-sm
+            transition-colors hover:bg-foreground/10`
           : "",
         "flex items-center justify-center",
-        "bg-foreground text-background transition-colors hover:bg-gray-900",
         "text-xl font-semibold",
         className
       )}
