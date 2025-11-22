@@ -84,7 +84,7 @@ export default function Feedback() {
           </RadarChart>
           <div className="lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-6">
             {data.map((item) => (
-              <RadialChart>
+              <RadialChart key={item.id}>
                 <RadialChartHeader>
                   <RadialChartHeadline>
                     <RadialChartTitle>
@@ -98,10 +98,7 @@ export default function Feedback() {
                     {item.description}
                   </RadialChartDescription>
                 </RadialChartHeader>
-                <RadialChartContent
-                  value={item.score}
-                  color={item.color}
-                />
+                <RadialChartContent data={item} />
               </RadialChart>
             ))}
           </div>
