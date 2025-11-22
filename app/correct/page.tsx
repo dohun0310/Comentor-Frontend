@@ -1,0 +1,328 @@
+"use client";
+
+import { ChangeEvent, useCallback, useEffect, useState, useRef } from "react";
+import { useSearchParams } from "next/navigation";
+import { Header } from "@/components/Header";
+import { Button } from "@/components/Button";
+import { Icon } from "@/components/Icon";
+import { CommentCorrect } from "@/utils/correct";
+
+export default function Correct() {
+  const searchParams = useSearchParams();
+
+  const comment = searchParams.get("comment");
+  const initialValue = comment ?? "";
+  const [history, setHistory] = useState<{ entries: string[]; index: number }>(() => ({
+    entries: [initialValue],
+    index: 0,
+  }));
+
+  const value = history.entries[history.index] ?? "";
+  const canUndo = history.index > 0;
+  const canRedo = history.index < history.entries.length - 1;
+
+  useEffect(() => {
+    setHistory({ entries: [initialValue], index: 0 });
+  }, [initialValue]);
+
+  const updateValue = useCallback((nextValue: string) => {
+    setHistory((prev) => {
+      const truncatedEntries = prev.entries.slice(0, prev.index + 1);
+      const lastEntry = truncatedEntries[truncatedEntries.length - 1];
+
+      if (lastEntry === nextValue) {
+        return prev;
+      }
+
+      return {
+        entries: [...truncatedEntries, nextValue],
+        index: truncatedEntries.length,
+      };
+    });
+  }, []);
+
+  const handleTextAreaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    updateValue(event.target.value);
+  };
+
+  const handleClear = () => updateValue("");
+
+  const handleUndo = () => {
+    setHistory((prev) => {
+      if (prev.index === 0) {
+        return prev;
+      }
+
+      return { ...prev, index: prev.index - 1 };
+    });
+  };
+
+  const handleRedo = () => {
+    setHistory((prev) => {
+      if (prev.index >= prev.entries.length - 1) {
+        return prev;
+      }
+
+      return { ...prev, index: prev.index + 1 };
+    });
+  };
+
+  const speakText = useCallback((text: string) => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const trimmed = text.trim();
+    if (!trimmed) {
+      return;
+    }
+
+    const synth = window.speechSynthesis;
+    if (!synth) {
+      console.warn("Speech synthesis is not supported in this browser.");
+      return;
+    }
+
+    synth.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(trimmed);
+    utterance.lang = /[a-zA-Z]/.test(trimmed) ? "en-US" : "ko-KR";
+    synth.speak(utterance);
+  }, []);
+
+  const copyText = useCallback((text: string) => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const trimmed = text.trim();
+    if (!trimmed) {
+      return;
+    }
+
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(trimmed).catch((error) => {
+        console.warn("Clipboard write failed", error);
+      });
+      return;
+    }
+
+    const textarea = document?.createElement("textarea");
+    if (!textarea) {
+      return;
+    }
+
+    textarea.value = trimmed;
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    try {
+      document.execCommand("copy");
+    } catch (error) {
+      console.warn("execCommand copy failed", error);
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  }, []);
+
+  const [result, setResult] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const hasResRef = useRef(false);
+
+  const handleCorrect = useCallback(async () => {
+    const text = value.trim();
+    if (!text) return;
+
+    setIsLoading(true);
+    setError(null);
+    setResult(null);
+
+    const res = await CommentCorrect(text);
+    if (!res.ok) {
+      setError(res.message ?? "알 수 없는 오류가 발생했습니다.");
+      setIsLoading(false);
+      return;
+    }
+
+    setResult(res.detail ?? "");
+    setIsLoading(false);
+  }, [value]);
+
+  useEffect(() => {
+    if (hasResRef.current) return;
+    if (!comment || comment.trim() === "") return;
+
+    hasResRef.current = true;
+    handleCorrect();
+  }, [comment, handleCorrect]);
+
+	return (
+		<main className="relative flex min-h-screen flex-col bg-blue-100/20">
+			<div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_bottom,rgba(102,136,255,0.18),transparent_60%)]" />
+			<Header />
+			<section className="mx-auto w-full max-w-[1350px] 
+        flex flex-col
+        px-4 pb-16 pt-12"
+      >
+				<div className="flex flex-col gap-2">
+					<div className="flex flex-wrap gap-4 text-sm font-medium">
+							<span className="text-base font-semibold text-blue-500">
+                Other Bias
+							</span>
+              <span className="text-base font-semibold text-green-700">
+                Hate Content
+							</span>
+              <span className="text-base font-semibold text-purple-500">
+                Abusive
+							</span>
+              <span className="text-base font-semibold text-orange-500">
+                Sexism
+							</span>
+					</div>
+					<h1 className="text-4xl font-semibold">
+						당신의 온라인 편향성 분석
+					</h1>
+				</div>
+				<div
+          className="rounded-3xl mt-6 bg-background"
+          style={{ boxShadow: "-6px -5px 15px 0 rgba(0, 0, 0, 0.08)" }}
+        >
+          <div className="max-w-[1350px] w-full
+            flex flex-col
+            px-3 pb-3"
+          >
+            <div className="min-h-17 relative flex items-center text-center">
+              <p className="flex-1 text-xl">
+                {result ? "원문" : "수정 전"}
+              </p>
+              <Icon
+                name="chevron-double-left"
+                color="var(--color-gray-500)"
+                className="absolute left-1/2 -translate-x-1/2"
+              />
+              <p className={`flex-1 text-xl
+                ${isLoading ? "animate-pulse" :
+                  result ? "text-blue-500" :
+                  error && "text-red-500"}`}
+              >
+                {isLoading ? "교정 중..." :
+                  result ? "수정 후" :
+                  error && "오류"}
+              </p>
+            </div>
+            <div className="h-75 flex">
+              <div className="flex-1 inline-flex gap-2 p-8 border-t border-gray-300">
+                <textarea
+                  value={value}
+                  onChange={handleTextAreaChange}
+                  placeholder="내용을 입력하세요..."
+                  className="w-full h-full
+                    text-lg
+                    resize-none outline-none"
+                />
+                {value !== "" && (
+                  <Button
+                    size="icon"
+                    onClick={handleClear}
+                  >
+                    <Icon name="x" />
+                  </Button>
+                )}
+              </div>
+              <div className={`flex-1 inline-flex
+                ${result ? "border border-blue-500" :
+                  error && "border border-red-500 text-red-700"}
+                gap-2 p-8
+                ${comment === null && "border-t border-gray-300"}`}
+              >
+                {isLoading ? (
+                  <div className="flex flex-col w-full gap-2">
+                    {[...Array(10)].map((_, index) => (
+                      <div key={index} className="w-full h-5 bg-gray-200 animate-pulse" />
+                    ))}
+                  </div>
+                ) : error ? (
+                  <p className="m-auto text-center">{error}</p>
+                ) : result !== null ? (
+                  <p className={`w-full h-full text-lg overflow-y-auto`}>
+                    {result || "수정이 필요하지 않은 문장입니다."}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+            <div className="flex">
+              <div className="flex-1 inline-flex justify-between p-8">
+                <div className="h-fit flex gap-10">
+                  <Button
+                    size="icon"
+                    onClick={() => speakText(value)}
+                    className={!value ? "opacity-50 cursor-not-allowed" : ""}
+                  >
+                    <Icon name="voice" color="var(--color-gray-500)" />
+                  </Button>
+                  <div className="flex gap-6">
+                    <Button
+                      size="icon"
+                      onClick={handleUndo}
+                      disabled={!canUndo}
+                    >
+                      <Icon name="arrow-curve-left-up" color="var(--color-gray-500)" />
+                    </Button>
+                    <Button
+                      size="icon"
+                      onClick={handleRedo}
+                      disabled={!canRedo}
+                    >
+                      <Icon name="arrow-curve-right-up" color="var(--color-gray-500)" />
+                    </Button>
+                  </div>
+                </div>
+                <p>
+                  {value.length}
+                </p>
+              </div>
+              <div className="flex-1 inline-flex justify-between p-8">
+                {result && (
+                  <>
+                    <Button
+                      size="icon"
+                      onClick={() => speakText(result)}
+                    >
+                      <Icon name="voice" color="var(--color-gray-500)" />
+                    </Button>
+                    <Button
+                      size="icon"
+                      onClick={() => copyText(result)}
+                    >
+                      <Icon name="copy-right" color="var(--color-gray-500)" />
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+				</div>
+				<div className="flex justify-end mt-22">
+          <Button
+            className={value === "" ?
+              "bg-blue-500/50 hover:bg-blue-600/50 cursor-not-allowed" :
+              "bg-blue-500 hover:bg-blue-600"}
+            disabled={value === ""}
+            onClick={() => {{
+              result && value === comment ? window.location.href = `/feedback?comment=${encodeURIComponent(value)}` :
+              window.location.href = `/correct?comment=${encodeURIComponent(value)}`;
+            }}}
+          >
+            {isLoading ? "교정 중..." :
+              result && value !== comment ? "다시 교정하기" :
+              result ? "분석하기" :
+              "교정하기"}
+          </Button>
+				</div>
+			</section>
+		</main>
+	);
+}
