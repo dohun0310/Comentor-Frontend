@@ -8,10 +8,11 @@ import { Icon } from "@/components/Icon";
 
 export default function Correct() {
   const searchParams = useSearchParams();
-  const comment = searchParams.get("comment") ?? "";
+  const comment = searchParams.get("comment");
 
+  const initialValue = comment ?? "";
   const [history, setHistory] = useState<{ entries: string[]; index: number }>(() => ({
-    entries: [comment],
+    entries: [initialValue],
     index: 0,
   }));
 
@@ -20,8 +21,8 @@ export default function Correct() {
   const canRedo = history.index < history.entries.length - 1;
 
   useEffect(() => {
-    setHistory({ entries: [comment], index: 0 });
-  }, [comment]);
+    setHistory({ entries: [initialValue], index: 0 });
+  }, [initialValue]);
 
   const updateValue = useCallback((nextValue: string) => {
     setHistory((prev) => {
