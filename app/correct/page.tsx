@@ -8,11 +8,10 @@ import { Icon } from "@/components/Icon";
 
 export default function Correct() {
   const searchParams = useSearchParams();
-  const query = searchParams.get("query");
+  const comment = searchParams.get("comment") ?? "";
 
-  const initialValue = query ?? "";
   const [history, setHistory] = useState<{ entries: string[]; index: number }>(() => ({
-    entries: [initialValue],
+    entries: [comment],
     index: 0,
   }));
 
@@ -21,8 +20,8 @@ export default function Correct() {
   const canRedo = history.index < history.entries.length - 1;
 
   useEffect(() => {
-    setHistory({ entries: [initialValue], index: 0 });
-  }, [initialValue]);
+    setHistory({ entries: [comment], index: 0 });
+  }, [comment]);
 
   const updateValue = useCallback((nextValue: string) => {
     setHistory((prev) => {
@@ -164,7 +163,7 @@ export default function Correct() {
           >
             <div className="min-h-17 relative flex items-center text-center">
               <p className="flex-1 text-xl">
-                {query === null ? "원문" : "수정 전"}
+                {comment === null ? "원문" : "수정 전"}
               </p>
               <Icon
                 name="chevron-double-left"
@@ -172,7 +171,7 @@ export default function Correct() {
                 className="absolute left-1/2 -translate-x-1/2"
               />
               <p className="flex-1 text-xl text-blue-500">
-                {query !== null && "수정 후"}
+                {comment !== null && "수정 후"}
               </p>
             </div>
             <div className="min-h-75 h-full flex">
@@ -181,10 +180,8 @@ export default function Correct() {
                   value={value}
                   onChange={handleTextAreaChange}
                   placeholder="내용을 입력하세요..."
-                  className="
-                    w-full h-full
-                    resize-none outline-none
-                  "
+                  className="w-full h-full
+                            resize-none outline-none"
                 />
                 {value !== "" && (
                   <Button
@@ -197,7 +194,7 @@ export default function Correct() {
               </div>
               <div className={`flex-1 inline-flex
                               gap-2 p-8 
-                              ${query === null ?
+                              ${comment === null ?
                                           "border-t border-gray-300" :
                                           "border border-blue-500"}`}
               >
@@ -212,7 +209,7 @@ export default function Correct() {
                   <Button
                     size="icon"
                     onClick={() => speakText(value)}
-                    className={query === null ? "opacity-50 cursor-not-allowed" : ""}
+                    className={comment === null ? "opacity-50 cursor-not-allowed" : ""}
                   >
                     <Icon name="voice" color="var(--color-gray-500)" />
                   </Button>
@@ -238,7 +235,7 @@ export default function Correct() {
                 </p>
               </div>
               <div className="flex-1 inline-flex justify-between p-8">
-                {query !== null && (
+                {comment !== null && (
                   <>
                     <Button
                       size="icon"
@@ -261,10 +258,10 @@ export default function Correct() {
 				<div className="flex justify-end mt-22">
           <Button
             className={value === "" ?
-                        "bg-blue-500/50 hover:bg-blue-600/50 cursor-not-allowed" :
-                        "bg-blue-500 hover:bg-blue-600"}
+                                "bg-blue-500/50 hover:bg-blue-600/50 cursor-not-allowed" :
+                                "bg-blue-500 hover:bg-blue-600"}
             disabled={value === ""}
-            onClick={() => {window.location.href = `/correct?query=${encodeURIComponent(value)}`;}}
+            onClick={() => {window.location.href = `/correct?comment=${encodeURIComponent(value)}`;}}
           >
             분석하기
           </Button>
