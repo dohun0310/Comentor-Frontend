@@ -1,15 +1,16 @@
 "use client";
 
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/Button";
 import { Icon } from "@/components/Icon";
+import { CommentCorrect } from "@/utils/correct";
 
 export default function Correct() {
   const searchParams = useSearchParams();
-  const comment = searchParams.get("comment");
 
+  const comment = searchParams.get("comment");
   const initialValue = comment ?? "";
   const [history, setHistory] = useState<{ entries: string[]; index: number }>(() => ({
     entries: [initialValue],
@@ -126,15 +127,45 @@ export default function Correct() {
     }
   }, []);
 
+  const [result, setResult] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const hasResRef = useRef(false);
+
+  const handleCorrect = useCallback(async () => {
+    const text = value.trim();
+    if (!text) return;
+
+    setIsLoading(true);
+    setError(null);
+    setResult(null);
+
+    const res = await CommentCorrect(text);
+    if (!res.ok) {
+      setError(res.message ?? "알 수 없는 오류가 발생했습니다.");
+      setIsLoading(false);
+      return;
+    }
+
+    setResult(res.detail ?? "");
+    setIsLoading(false);
+  }, [value]);
+
+  useEffect(() => {
+    if (hasResRef.current) return;
+    if (!comment || comment.trim() === "") return;
+
+    hasResRef.current = true;
+    handleCorrect();
+  }, [comment, handleCorrect]);
+
 	return (
 		<main className="relative flex min-h-screen flex-col bg-blue-100/20">
 			<div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_bottom,rgba(102,136,255,0.18),transparent_60%)]" />
 			<Header />
-			<section
-        className="mx-auto w-full max-w-[1350px] 
-                  flex flex-col
-                  px-4 pb-16 pt-12"
-        
+			<section className="mx-auto w-full max-w-[1350px] 
+        flex flex-col
+        px-4 pb-16 pt-12"
       >
 				<div className="flex flex-col gap-2">
 					<div className="flex flex-wrap gap-4 text-sm font-medium">
@@ -155,34 +186,39 @@ export default function Correct() {
 						당신의 온라인 편향성 분석
 					</h1>
 				</div>
-				<div className="flex flex-col items-start
-                        rounded-3xl mt-6"
-        >
+				<div className="flex flex-col items-start rounded-3xl mt-6">
           <div className="max-w-[1350] w-full
                           flex flex-col
                           px-3 pb-3 bg-background"
           >
             <div className="min-h-17 relative flex items-center text-center">
               <p className="flex-1 text-xl">
-                {comment === null ? "원문" : "수정 전"}
+                {result ? "원문" : "수정 전"}
               </p>
               <Icon
                 name="chevron-double-left"
                 color="var(--color-gray-500)"
                 className="absolute left-1/2 -translate-x-1/2"
               />
-              <p className="flex-1 text-xl text-blue-500">
-                {comment !== null && "수정 후"}
+              <p className={`flex-1 text-xl
+                ${isLoading ? "animate-pulse" :
+                  result ? "text-blue-500" :
+                  error && "text-red-500"}`}
+              >
+                {isLoading ? "교정 중..." :
+                  result ? "수정 후" :
+                  error && "오류"}
               </p>
             </div>
-            <div className="min-h-75 h-full flex">
+            <div className="h-75 flex">
               <div className="flex-1 inline-flex gap-2 p-8 border-t border-gray-300">
                 <textarea
                   value={value}
                   onChange={handleTextAreaChange}
                   placeholder="내용을 입력하세요..."
                   className="w-full h-full
-                            resize-none outline-none"
+                    text-lg
+                    resize-none outline-none"
                 />
                 {value !== "" && (
                   <Button
@@ -194,14 +230,25 @@ export default function Correct() {
                 )}
               </div>
               <div className={`flex-1 inline-flex
-                              gap-2 p-8 
-                              ${comment === null ?
-                                          "border-t border-gray-300" :
-                                          "border border-blue-500"}`}
+                ${result ? "border border-blue-500" :
+                  error && "border border-red-500 text-red-700"}
+                gap-2 p-8
+                ${comment === null && "border-t border-gray-300"}`}
               >
-                <p className="w-full h-full">
-                  {value}
-                </p>
+                {isLoading && (
+                  <div className="flex flex-col w-full gap-2">
+                    {[...Array(10)].map((_, index) => (
+                      <div key={index} className="w-full h-5 bg-gray-200 animate-pulse" />
+                    ))}
+                  </div>
+                )}
+                {!isLoading && result && (
+                  <p className={`w-full h-full text-lg overflow-y-auto
+                    ${error && "text-center"}`}
+                  >
+                    {result ? result : error}
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex">
@@ -210,7 +257,7 @@ export default function Correct() {
                   <Button
                     size="icon"
                     onClick={() => speakText(value)}
-                    className={comment === null ? "opacity-50 cursor-not-allowed" : ""}
+                    className={!value ? "opacity-50 cursor-not-allowed" : ""}
                   >
                     <Icon name="voice" color="var(--color-gray-500)" />
                   </Button>
@@ -236,17 +283,17 @@ export default function Correct() {
                 </p>
               </div>
               <div className="flex-1 inline-flex justify-between p-8">
-                {comment !== null && (
+                {result && (
                   <>
                     <Button
                       size="icon"
-                      onClick={() => speakText(value)}
+                      onClick={() => speakText(result)}
                     >
                       <Icon name="voice" color="var(--color-gray-500)" />
                     </Button>
                     <Button
                       size="icon"
-                      onClick={() => copyText(value)}
+                      onClick={() => copyText(result)}
                     >
                       <Icon name="copy-right" color="var(--color-gray-500)" />
                     </Button>
@@ -259,12 +306,18 @@ export default function Correct() {
 				<div className="flex justify-end mt-22">
           <Button
             className={value === "" ?
-                                "bg-blue-500/50 hover:bg-blue-600/50 cursor-not-allowed" :
-                                "bg-blue-500 hover:bg-blue-600"}
+              "bg-blue-500/50 hover:bg-blue-600/50 cursor-not-allowed" :
+              "bg-blue-500 hover:bg-blue-600"}
             disabled={value === ""}
-            onClick={() => {window.location.href = `/correct?comment=${encodeURIComponent(value)}`;}}
+            onClick={() => {{
+              result && value === comment ? window.location.href = `/feedback?comment=${encodeURIComponent(value)}` :
+              window.location.href = `/correct?comment=${encodeURIComponent(value)}`;
+            }}}
           >
-            분석하기
+            {isLoading ? "교정 중..." :
+              result && value !== comment ? "다시 교정하기" :
+              result ? "분석하기" :
+              "교정하기"}
           </Button>
 				</div>
 			</section>
