@@ -11,6 +11,7 @@ export function Icon({
   color?: string;
 } & React.SVGProps<SVGSVGElement>) {
   const pathData = svgPath[name].paths;
+  const isStars = name === "stars";
 
   return (
     <svg
@@ -24,7 +25,7 @@ export function Icon({
       <path
         d={pathData}
         stroke={color}
-        strokeWidth="2"
+        strokeWidth={isStars ? 1.5 : 2}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
