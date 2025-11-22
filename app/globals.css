@@ -84,6 +84,12 @@
   --font-weight-medium: 500;
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
+
+  --animate-wipe: wipe 2.5s ease-in-out;
+  @keyframes wipe {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
 }
 
 body {
