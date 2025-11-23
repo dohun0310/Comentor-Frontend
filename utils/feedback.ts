@@ -13,7 +13,7 @@ const LABEL_MAP: Record<string, CommentFeedbackResponse> = {
     id: "Sexism",
     title: "성차별",
     description: "고정적 역할 부여나 차별적 관념이 드러나지 않는가?",
-    color: "var(--color-yellow-500)",
+    color: "var(--color-orange-500)",
   },
   bias_others: {
     id: "Other Bias",
