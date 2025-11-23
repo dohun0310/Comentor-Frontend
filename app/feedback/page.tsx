@@ -28,11 +28,10 @@ export default function Feedback({
   [key: string]: string | undefined
 }>
 }) {
-  const { comment } = use(searchParams);
-  const { result } = use(searchParams);
-  const { returnPath } = use(searchParams);
+  const { comment, result, returnPath } = use(searchParams);
 
   const [data, setData] = useState<CommentFeedbackResponse[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   
   useEffect(() => {
     async function fetchData() {
@@ -43,7 +42,9 @@ export default function Feedback({
             ...item,
             score: item.score ?? 0
           }));
+
           setData(correctedData);
+          setIsLoading(false);
         } else {
           setData([]);
         }
@@ -91,37 +92,41 @@ export default function Feedback({
             {result}
           </p>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-          <RadarChart className="lg:col-span-3">
-            <RadarChartHeader>
-              <RadarChartTitle>
-                당신이 가지고 있는 편향 분석
-              </RadarChartTitle>
-              <RadarChartLegend data={data} />
-            </RadarChartHeader>
-            <RadarChartContent data={data} />
-          </RadarChart>
-          <div className="lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {data.map((item) => (
-              <RadialChart key={item.id}>
-                <RadialChartHeader>
-                  <RadialChartHeadline>
-                    <RadialChartTitle>
-                      {item.title}
-                    </RadialChartTitle>
-                    <RadialChartSubtitle color={item.color}>
-                      {item.id}
-                    </RadialChartSubtitle>
-                  </RadialChartHeadline>
-                  <RadialChartDescription>
-                    {item.description}
-                  </RadialChartDescription>
-                </RadialChartHeader>
-                <RadialChartContent data={item} />
-              </RadialChart>
-            ))}
+        {isLoading ? (
+          <div className="w-full h-[70vh] rounded-[1.25rem] bg-gray-200 animate-pulse" />
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            <RadarChart className="lg:col-span-3">
+              <RadarChartHeader>
+                <RadarChartTitle>
+                  당신이 가지고 있는 편향 분석
+                </RadarChartTitle>
+                <RadarChartLegend data={data} />
+              </RadarChartHeader>
+              <RadarChartContent data={data} />
+            </RadarChart>
+            <div className="lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {data.map((item) => (
+                <RadialChart key={item.id}>
+                  <RadialChartHeader>
+                    <RadialChartHeadline>
+                      <RadialChartTitle>
+                        {item.title}
+                      </RadialChartTitle>
+                      <RadialChartSubtitle color={item.color}>
+                        {item.id}
+                      </RadialChartSubtitle>
+                    </RadialChartHeadline>
+                    <RadialChartDescription>
+                      {item.description}
+                    </RadialChartDescription>
+                  </RadialChartHeader>
+                  <RadialChartContent data={item} />
+                </RadialChart>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
         <div className="flex justify-end mt-5">
           <Button
             className="bg-blue-500 hover:bg-blue-600"

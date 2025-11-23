@@ -12,8 +12,7 @@ export default function Correct({
   [key: string]: string | undefined
 }>
 }) {
-  const { comment } = use(searchParams);
-  const { returnPath } = use(searchParams);
+  const { comment, returnPath } = use(searchParams);
 
   const initialValue = comment ?? "";
   const [history, setHistory] = useState<{ entries: string[]; index: number }>(() => ({
