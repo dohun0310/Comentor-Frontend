@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/Button";
 import { Icon } from "@/components/Icon";
@@ -19,19 +19,34 @@ import {
   RadialChartDescription,
   RadialChartContent
 } from "@/components/Chart";
-
-const data = [
-  { id: "Abusive", title: "욕설/모욕", description: "대상을 공격하거나 감정적으로 공격하는 표현은 없는가?", score: 34, color: "var(--color-purple-500)" },
-  { id: "Sexism", title: "성차별", description: "고정적 역할 부여나 차별적 관념이 드러나지 않는가?", score: 42, color: "var(--color-yellow-500)" },
-  { id: "Other Bias", title: "기타 차별", description: "개인적 속성을 이유로 차별하거나 배제하는 내용은 없는가?", score: 23, color: "var(--color-blue-500)" },
-  { id: "Hate Content", title: "혐오", description: "특정 집단이나 개인에 대한 적대감 또는 베타성을 조장하는가?", score: 52, color: "var(--color-green-500)" },
-]
+import { CommentFeedback } from "@/utils/feedback";
+import { CommentFeedbackResponse } from "@/types/feedback";
 
 export default function Feedback() {
   const searchParams = useSearchParams();
   const comment = searchParams.get("comment");
   const result = searchParams.get("result");
   const returnPath = searchParams.get("returnPath") || "/";
+
+  const [data, setData] = useState<CommentFeedbackResponse[]>([]);
+  
+  useEffect(() => {
+    async function fetchData() {
+      if (comment) {
+        const response = await CommentFeedback(comment);
+        if (response?.detail && Array.isArray(response.detail)) {
+          const correctedData = response.detail.map((item: CommentFeedbackResponse) => ({
+            ...item,
+            score: item.score ?? 0
+          }));
+          setData(correctedData);
+        } else {
+          setData([]);
+        }
+      }
+    }
+    fetchData();
+  }, [comment]);
 
   const copyText = useCallback(() => {
     if (typeof result === "string") {
@@ -72,7 +87,7 @@ export default function Feedback() {
             {result}
           </p>
         </div>
-        <div className="grid grid-col-1 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           <RadarChart className="lg:col-span-3">
             <RadarChartHeader>
               <RadarChartTitle>
