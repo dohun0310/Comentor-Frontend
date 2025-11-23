@@ -75,7 +75,7 @@ export async function CommentFeedback (
       problematic: feedbackData.is_problematic,
       detail: feedbackData.all_labels.map(({ label, score }: { label: string; score: number; }) => ({
         ...LABEL_MAP[label],
-        score: Number(score.toFixed(2)) * 100,
+        score: Math.round(score * 100),
       }))
     };
   } catch (e) {
