@@ -29,7 +29,7 @@ const LABEL_MAP: Record<string, CommentCorrectResponse> = {
   }
 }
 
-export async function CommentCorrect (
+export async function CommentFeedback (
   comment: string
 ): Promise<CommentFeedbackResult> {
   if (!comment || typeof comment !== "string") {
