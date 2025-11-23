@@ -48,7 +48,7 @@ export function RadarChartContent({
     <div 
       className={cn(
         "relative w-full",
-        "h-[360px] sm:h-160 md:h-[480px] lg:h-[600px]",
+        "h-[360px] sm:h-85 md:h-[480px] lg:h-[600px]",
         "md:flex-1",
         className
       )}
