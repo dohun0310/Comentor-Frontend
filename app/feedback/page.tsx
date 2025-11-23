@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, use } from "react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/Button";
 import { Icon } from "@/components/Icon";
@@ -22,11 +22,15 @@ import {
 import { CommentFeedback } from "@/utils/feedback";
 import { CommentFeedbackResponse } from "@/types/feedback";
 
-export default function Feedback() {
-  const searchParams = useSearchParams();
-  const comment = searchParams.get("comment");
-  const result = searchParams.get("result");
-  const returnPath = searchParams.get("returnPath") || "/";
+export default function Feedback({
+  searchParams
+}: { searchParams: Promise<{
+  [key: string]: string | undefined
+}>
+}) {
+  const { comment } = use(searchParams);
+  const { result } = use(searchParams);
+  const { returnPath } = use(searchParams);
 
   const [data, setData] = useState<CommentFeedbackResponse[]>([]);
   
@@ -121,7 +125,7 @@ export default function Feedback() {
         <div className="flex justify-end mt-5">
           <Button
             className="bg-blue-500 hover:bg-blue-600"
-            onClick={() => {window.location.href = returnPath}}
+            onClick={() => {window.location.href = returnPath ?? "/"}}
           >
             리터러시 완료
           </Button>

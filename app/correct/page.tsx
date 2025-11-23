@@ -1,16 +1,19 @@
 "use client";
 
-import { ChangeEvent, useCallback, useEffect, useState, useRef } from "react";
-import { useSearchParams } from "next/navigation";
+import { ChangeEvent, useCallback, useEffect, useState, useRef, use } from "react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/Button";
 import { Icon } from "@/components/Icon";
 import { CommentCorrect } from "@/utils/correct";
 
-export default function Correct() {
-  const searchParams = useSearchParams();
-  const comment = searchParams.get("comment");
-  const returnPath = searchParams.get("returnPath");
+export default function Correct({
+  searchParams
+}: { searchParams: Promise<{
+  [key: string]: string | undefined
+}>
+}) {
+  const { comment } = use(searchParams);
+  const { returnPath } = use(searchParams);
 
   const initialValue = comment ?? "";
   const [history, setHistory] = useState<{ entries: string[]; index: number }>(() => ({
