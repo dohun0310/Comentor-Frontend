@@ -5,14 +5,14 @@ import {
   RadialBarChart,
   ResponsiveContainer,
 } from "recharts";
+import { CommentFeedbackResponse } from "@/types/feedback";
 import { cn } from "@/utils/cn";
 
 export function RadialChartContent({
-  value,
-  color,
+  data,
   className,
   ...props
-}: { value: string; color?: string } & React.HTMLAttributes<HTMLDivElement>) {
+}: { data: CommentFeedbackResponse } & React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
@@ -27,7 +27,7 @@ export function RadialChartContent({
       >
         <span
           className="block h-28 w-28 rounded-full opacity-35 blur-3xl"
-          style={{ backgroundColor: color }}
+          style={{ backgroundColor: data.color }}
         />
       </div>
       <ResponsiveContainer
@@ -35,7 +35,7 @@ export function RadialChartContent({
         height="100%"
       >
         <RadialBarChart
-          data={[{ progress: value, track: 100 }]}
+          data={[{ progress: data.score, track: 100 }]}
           outerRadius="72%"
           innerRadius="100%"
           startAngle={90}
@@ -53,7 +53,7 @@ export function RadialChartContent({
             dataKey="progress"
             cornerRadius={999}
             barSize={16}
-            fill={color}
+            fill={data.color}
             isAnimationActive={false}
           />
           <PolarAngleAxis
@@ -69,7 +69,7 @@ export function RadialChartContent({
           포함 지수
         </span>
         <p className="mt-1 flex items-baseline text-3xl font-extrabold text-gray-900">
-          {value} <span className="text-lg font-semibold text-gray-500">%</span>
+          {data.score} <span className="text-lg font-semibold text-gray-500">%</span>
         </p>
       </div>
     </div>

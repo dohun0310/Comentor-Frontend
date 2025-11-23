@@ -5,13 +5,14 @@ import {
   PolarAngleAxis,
   ResponsiveContainer,
 } from "recharts";
+import { CommentFeedbackResponse } from "@/types/feedback";
 import { cn } from "@/utils/cn";
 
 export function RadarChartContent({
   data,
   className,
   ...props
-}: {data: {axis: string; value: number; color: string}[] } & React.HTMLAttributes<HTMLDivElement>) {
+}: { data: CommentFeedbackResponse[] } & React.HTMLAttributes<HTMLDivElement>) {
   const renderDot = ({
     cx,
     cy,
@@ -83,14 +84,14 @@ export function RadarChartContent({
             strokeWidth={1}
           />
           <PolarAngleAxis
-            dataKey="axis"
+            dataKey="title"
             tick={{ fill: "var(--color-gray-700)", fontSize: 14 }}
             tickLine={false}
           />
-          {data.map((item, index) => (
+          {data.map((_, index) => (
             <Radar
               key={index}
-              dataKey="value"
+              dataKey="score"
               stroke={`url(#rg-${index})`}
               strokeWidth={3}
               fill={`url(#rg-${index})`}
