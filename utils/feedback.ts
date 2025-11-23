@@ -1,8 +1,8 @@
 "use server";
 
-import { CommentFeedbackResult, CommentCorrectResponse } from "@/types/feedback";
+import { CommentFeedbackResult, CommentFeedbackResponse } from "@/types/feedback";
 
-const LABEL_MAP: Record<string, CommentCorrectResponse> = {
+const LABEL_MAP: Record<string, CommentFeedbackResponse> = {
   offensive: {
     id: "Abusive",
     title: "욕설/모욕",
