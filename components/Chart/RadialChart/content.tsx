@@ -5,14 +5,14 @@ import {
   RadialBarChart,
   ResponsiveContainer,
 } from "recharts";
-import { CommentCorrectResponse } from "@/types/feedback";
+import { CommentFeedbackResponse } from "@/types/feedback";
 import { cn } from "@/utils/cn";
 
 export function RadialChartContent({
   data,
   className,
   ...props
-}: { data: CommentCorrectResponse } & React.HTMLAttributes<HTMLDivElement>) {
+}: { data: CommentFeedbackResponse } & React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(

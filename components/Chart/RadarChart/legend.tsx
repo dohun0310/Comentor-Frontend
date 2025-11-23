@@ -1,11 +1,11 @@
-import { CommentCorrectResponse } from "@/types/feedback";
+import { CommentFeedbackResponse } from "@/types/feedback";
 import { cn } from "@/utils/cn";
 
 export function RadarChartLegend({
   data,
   className,
   ...props
-}: { data: CommentCorrectResponse[] } & React.HTMLAttributes<HTMLDivElement>) {
+}: { data: CommentFeedbackResponse[] } & React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div className={cn("flex flex-col gap-2", className)} {...props}>
       {data.map((item, index) => (

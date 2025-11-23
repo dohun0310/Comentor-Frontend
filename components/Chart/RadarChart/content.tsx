@@ -5,14 +5,14 @@ import {
   PolarAngleAxis,
   ResponsiveContainer,
 } from "recharts";
-import { CommentCorrectResponse } from "@/types/feedback";
+import { CommentFeedbackResponse } from "@/types/feedback";
 import { cn } from "@/utils/cn";
 
 export function RadarChartContent({
   data,
   className,
   ...props
-}: { data: CommentCorrectResponse[] } & React.HTMLAttributes<HTMLDivElement>) {
+}: { data: CommentFeedbackResponse[] } & React.HTMLAttributes<HTMLDivElement>) {
   const renderDot = ({
     cx,
     cy,
