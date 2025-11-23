@@ -28,9 +28,7 @@ export default function Feedback({
   [key: string]: string | undefined
 }>
 }) {
-  const { comment } = use(searchParams);
-  const { result } = use(searchParams);
-  const { returnPath } = use(searchParams);
+  const { comment, result, returnPath } = use(searchParams);
 
   const [data, setData] = useState<CommentFeedbackResponse[]>([]);
   
