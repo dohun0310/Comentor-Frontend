@@ -25,7 +25,7 @@ const LABEL_MAP: Record<string, CommentFeedbackResponse> = {
     id: "Hate Content",
     title: "혐오",
     description: "특정 집단이나 개인에 대한 적대감 또는 베타성을 조장하는가?",
-    color: "var(--color-green-500)",
+    color: "var(--color-green-700)",
   }
 }
 
