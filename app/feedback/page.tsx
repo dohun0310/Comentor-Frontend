@@ -1,6 +1,5 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState, use } from "react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/Button";
@@ -105,7 +104,7 @@ export default function Feedback({
               </RadarChartHeader>
               <RadarChartContent data={data} />
             </RadarChart>
-            <div className="lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
               {data.map((item) => (
                 <RadialChart key={item.id}>
                   <RadialChartHeader>
