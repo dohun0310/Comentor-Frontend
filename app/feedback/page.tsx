@@ -1,6 +1,5 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState, use } from "react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/Button";
