@@ -8,7 +8,7 @@ export function RadialChartDescription({
   return (
     <span
       className={cn(
-        "text-sm text-gray-600 break-keep",
+        "text-xs sm:text-sm text-gray-600 break-keep line-clamp-2 sm:line-clamp-none",
         className
       )} {...props}
     >

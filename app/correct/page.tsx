@@ -168,103 +168,51 @@ export default function Correct({
 			<Header />
 			<section className="mx-auto w-full max-w-[1350px]
         flex flex-col
-        px-4 pb-16 pt-12"
+        px-4 pb-8 sm:pb-12 md:pb-16 pt-6 sm:pt-8 md:pt-12"
       >
-				<div className="flex flex-col gap-2">
-					<div className="flex flex-wrap gap-4 text-sm font-medium">
-							<span className="text-base font-semibold text-blue-500">
+				<div className="flex flex-col gap-1.5 sm:gap-2">
+					<div className="flex flex-wrap gap-2 sm:gap-4 text-sm font-medium">
+							<span className="text-xs sm:text-sm md:text-base font-semibold text-blue-500">
                 Other Bias
 							</span>
-              <span className="text-base font-semibold text-green-700">
+              <span className="text-xs sm:text-sm md:text-base font-semibold text-green-700">
                 Hate Content
 							</span>
-              <span className="text-base font-semibold text-purple-500">
+              <span className="text-xs sm:text-sm md:text-base font-semibold text-purple-500">
                 Abusive
 							</span>
-              <span className="text-base font-semibold text-orange-500">
+              <span className="text-xs sm:text-sm md:text-base font-semibold text-orange-500">
                 Sexism
 							</span>
 					</div>
-					<h1 className="text-4xl font-semibold">
+					<h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold">
 						당신의 온라인 편향성 분석
 					</h1>
 				</div>
-				<div
-          className="rounded-3xl mt-6 bg-background"
-          style={{ boxShadow: "-6px -5px 15px 0 rgba(0, 0, 0, 0.08)" }}
-        >
-          <div className="max-w-[1350px] w-full
-            flex flex-col
-            px-3 pb-3"
+				<div className="flex flex-col md:flex-row gap-4 md:gap-0 mt-4 sm:mt-6">
+          {/* 원문 섹션 */}
+          <div
+            className="flex-1 rounded-3xl md:rounded-r-none bg-background"
+            style={{ boxShadow: "-6px -5px 15px 0 rgba(0, 0, 0, 0.08)" }}
           >
-            <div className="min-h-17 relative flex items-center text-center">
-              <p className="flex-1 text-xl">
-                {result ? "원문" : "수정 전"}
-              </p>
-              <Icon
-                name="chevron-double-left"
-                color="var(--color-gray-500)"
-                className="absolute left-1/2 -translate-x-1/2"
-              />
-              <p className={`flex-1 text-xl
-                ${isLoading ? "animate-pulse" :
-                  result ? "text-blue-500" :
-                  error && "text-red-500"}`}
-              >
-                {isLoading ? "교정 중..." :
-                  result ? "수정 후" :
-                  error && "오류"}
-              </p>
-            </div>
-            <div className="h-75 flex">
-              <div className="flex-1 inline-flex gap-2 p-8 border-t border-gray-300">
+            <div className="flex flex-col p-3 sm:p-4 md:p-6">
+              <div className="min-h-10 sm:min-h-12 flex items-center justify-center border-b border-gray-200 pb-2 sm:pb-3">
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl font-medium">
+                  {result ? "원문" : "수정 전"}
+                </p>
+              </div>
+              <div className="min-h-[160px] sm:min-h-[200px] md:min-h-[280px] p-3 sm:p-4 md:p-6">
                 <textarea
                   value={value}
                   onChange={handleTextAreaChange}
                   placeholder="내용을 입력하세요..."
-                  className="w-full h-full
-                    text-lg
+                  className="w-full h-full min-h-[140px] sm:min-h-[180px] md:min-h-[240px]
+                    text-sm sm:text-base md:text-lg
                     resize-none outline-none"
                 />
-                {value !== "" && (
-                  <Button
-                    size="icon"
-                    onClick={handleClear}
-                  >
-                    <Icon name="x" />
-                  </Button>
-                )}
               </div>
-              <div className={`flex-1 inline-flex
-                ${result ? "border border-blue-500" :
-                  error && "border border-red-500 text-red-700"}
-                gap-2 p-8
-                ${comment === null && "border-t border-gray-300"}`}
-              >
-                {isLoading ? (
-                  <div className="flex flex-col w-full gap-2">
-                    {[...Array(10)].map((_, index) => (
-                      <div key={index} className="w-full h-5 bg-gray-200 animate-pulse" />
-                    ))}
-                  </div>
-                ) : error ? (
-                  <p className="m-auto text-center">
-                    {error}
-                  </p>
-                ) : result !== null ? (
-                  <p className="relative w-full h-full text-lg overflow-y-auto
-                    text-transparent bg-clip-text bg-local
-                    bg-[linear-gradient(120deg,var(--foreground)_10%,var(--color-green-500)_25%,var(--color-purple-500)_50%,var(--color-blue-500)_75%,var(--foreground)_90%)]
-                    bg-size-[850%_auto] animate-wipe"
-                  >
-                    {result || "수정이 필요하지 않은 문장입니다."}
-                  </p>
-                ) : null}
-              </div>
-            </div>
-            <div className="flex">
-              <div className="flex-1 inline-flex justify-between p-8">
-                <div className="h-fit flex gap-10">
+              <div className="flex justify-between items-center pt-2 sm:pt-3 border-t border-gray-200 px-1 sm:px-2">
+                <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
                   <Button
                     size="icon"
                     onClick={() => speakText(value)}
@@ -272,7 +220,7 @@ export default function Correct({
                   >
                     <Icon name="voice" color="var(--color-gray-500)" />
                   </Button>
-                  <div className="flex gap-6">
+                  <div className="flex gap-2 sm:gap-3 md:gap-4">
                     <Button
                       size="icon"
                       onClick={handleUndo}
@@ -288,12 +236,74 @@ export default function Correct({
                       <Icon name="arrow-curve-right-up" color="var(--color-gray-500)" />
                     </Button>
                   </div>
+                  {value !== "" && (
+                    <Button
+                      size="icon"
+                      onClick={handleClear}
+                    >
+                      <Icon name="x" color="var(--color-gray-500)" />
+                    </Button>
+                  )}
                 </div>
-                <p>
-                  {value.length}
+                <p className="text-xs sm:text-sm text-gray-500">
+                  {value.length}자
                 </p>
               </div>
-              <div className="flex-1 inline-flex justify-between p-8">
+            </div>
+          </div>
+
+          {/* 중앙 아이콘 (데스크톱만) */}
+          <div className="hidden md:flex items-center justify-center px-2">
+            <Icon
+              name="chevron-double-left"
+              color="var(--color-gray-400)"
+            />
+          </div>
+
+          {/* 수정 후 섹션 */}
+          <div
+            className={`flex-1 rounded-3xl md:rounded-l-none bg-background
+              ${result ? "ring-2 ring-blue-500" : error ? "ring-2 ring-red-500" : ""}`}
+            style={{ boxShadow: "-6px -5px 15px 0 rgba(0, 0, 0, 0.08)" }}
+          >
+            <div className="flex flex-col p-3 sm:p-4 md:p-6">
+              <div className="min-h-10 sm:min-h-12 flex items-center justify-center border-b border-gray-200 pb-2 sm:pb-3">
+                <p className={`text-sm sm:text-base md:text-lg lg:text-xl font-medium
+                  ${isLoading ? "animate-pulse" :
+                    result ? "text-blue-500" :
+                    error ? "text-red-500" : ""}`}
+                >
+                  {isLoading ? "교정 중..." :
+                    result ? "수정 후" :
+                    error ? "오류" : "수정 후"}
+                </p>
+              </div>
+              <div className="min-h-[160px] sm:min-h-[200px] md:min-h-[280px] p-3 sm:p-4 md:p-6">
+                {isLoading ? (
+                  <div className="flex flex-col w-full gap-2 sm:gap-3">
+                    {[...Array(5)].map((_, index) => (
+                      <div key={index} className="w-full h-4 sm:h-5 bg-gray-200 rounded animate-pulse" />
+                    ))}
+                  </div>
+                ) : error ? (
+                  <p className="text-center text-sm sm:text-base text-red-600 mt-8">
+                    {error}
+                  </p>
+                ) : result !== null ? (
+                  <p className="text-sm sm:text-base md:text-lg leading-relaxed
+                    text-transparent bg-clip-text bg-local
+                    bg-[linear-gradient(120deg,var(--foreground)_10%,var(--color-green-500)_25%,var(--color-purple-500)_50%,var(--color-blue-500)_75%,var(--foreground)_90%)]
+                    bg-size-[850%_auto] animate-wipe"
+                  >
+                    {result || "수정이 필요하지 않은 문장입니다."}
+                  </p>
+                ) : (
+                  <p className="text-center text-sm sm:text-base text-gray-400 mt-8">
+                    교정 결과가 여기에 표시됩니다
+                  </p>
+                )}
+              </div>
+              <div className="flex justify-between items-center pt-2 sm:pt-3 border-t border-gray-200 px-1 sm:px-2 min-h-[40px]">
                 {result && (
                   <>
                     <Button
@@ -313,8 +323,8 @@ export default function Correct({
               </div>
             </div>
           </div>
-				</div>
-				<div className="flex justify-end mt-22">
+        </div>
+				<div className="flex justify-end mt-6 sm:mt-10 md:mt-16 lg:mt-22">
           <Button
             className={value === "" ?
               "bg-blue-500/50 hover:bg-blue-600/50 cursor-not-allowed" :

@@ -8,8 +8,8 @@ export function RadarChart({
   return (
     <div
       className={cn(
-        "relative flex items-center",
-        "w-full p-10",
+        "relative flex flex-col md:flex-row items-center",
+        "w-full p-4 sm:p-6 md:p-8 lg:p-10",
         "rounded-[1.25rem] bg-white",
         className
       )}

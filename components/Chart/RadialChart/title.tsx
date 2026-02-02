@@ -8,7 +8,7 @@ export function RadialChartTitle({
   return (
     <p
       className={cn(
-        "text-xl font-semibold",
+        "text-sm sm:text-base md:text-lg lg:text-xl font-semibold",
         "text-gray-900",
         className
       )}

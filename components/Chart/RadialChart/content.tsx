@@ -16,7 +16,7 @@ export function RadialChartContent({
   return (
     <div
       className={cn(
-        "relative h-52 w-52",
+        "relative h-32 w-32 sm:h-40 sm:w-40 md:h-48 md:w-48 lg:h-52 lg:w-52",
         className
       )}
       {...props}
@@ -26,7 +26,7 @@ export function RadialChartContent({
         aria-hidden="true"
       >
         <span
-          className="block h-28 w-28 rounded-full opacity-35 blur-3xl"
+          className="block h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 lg:h-28 lg:w-28 rounded-full opacity-35 blur-3xl"
           style={{ backgroundColor: data.color }}
         />
       </div>
@@ -52,7 +52,7 @@ export function RadialChartContent({
           <RadialBar
             dataKey="progress"
             cornerRadius={999}
-            barSize={16}
+            barSize={12}
             fill={data.color}
             isAnimationActive={false}
           />
@@ -65,11 +65,11 @@ export function RadialChartContent({
         </RadialBarChart>
       </ResponsiveContainer>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-xs font-medium text-gray-500">
+        <span className="text-[10px] sm:text-xs font-medium text-gray-500">
           포함 지수
         </span>
-        <p className="mt-1 flex items-baseline text-3xl font-extrabold text-gray-900">
-          {data.score} <span className="text-lg font-semibold text-gray-500">%</span>
+        <p className="mt-0.5 sm:mt-1 flex items-baseline text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900">
+          {data.score} <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-500">%</span>
         </p>
       </div>
     </div>

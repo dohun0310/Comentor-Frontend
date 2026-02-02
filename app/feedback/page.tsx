@@ -64,19 +64,21 @@ export default function Feedback({
       <Header />
       <section className="mx-auto w-full max-w-[1380px]
         flex flex-col
-        px-4 pb-16 gap-6"
+        px-4 pb-8 sm:pb-12 md:pb-16 pt-2 sm:pt-4 gap-4 sm:gap-5 md:gap-6"
       >
         <div
-          className="w-full px-10 py-6 flex flex-col gap-4.5 rounded-[1.25rem] bg-background"
+          className="w-full px-4 sm:px-6 md:px-10 py-4 sm:py-5 md:py-6 flex flex-col gap-3 sm:gap-4 md:gap-4.5 rounded-[1.25rem] bg-background"
           style={{ boxShadow: "0 3.395px 16.974px 1.697px rgba(0, 0, 0, 0.08)" }}
         >
-          <div className="flex justify-between">
-            <div className="flex flex-row items-center gap-2">
+          <div className="flex justify-between items-center">
+            <div className="flex flex-row items-center gap-1.5 sm:gap-2">
               <Icon
                 name="stars"
                 color="var(--color-blue-500)"
+                size={18}
+                className="sm:w-5 sm:h-5 md:w-6 md:h-6"
               />
-              <span className="text-xl font-semibold">
+              <span className="text-base sm:text-lg md:text-xl font-semibold">
                 수정된 글
               </span>
             </div>
@@ -87,14 +89,14 @@ export default function Feedback({
               <Icon name="copy-right" color="var(--color-gray-500)" />
             </Button>
           </div>
-          <p className="text-lg break-keep">
+          <p className="text-sm sm:text-base md:text-lg break-keep">
             {result}
           </p>
         </div>
         {isLoading ? (
-          <div className="w-full h-[70vh] rounded-[1.25rem] bg-gray-200 animate-pulse" />
+          <div className="w-full h-[50vh] sm:h-[60vh] md:h-[70vh] rounded-[1.25rem] bg-gray-200 animate-pulse" />
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 sm:gap-5 md:gap-6">
             <RadarChart className="lg:col-span-3">
               <RadarChartHeader>
                 <RadarChartTitle>
@@ -104,7 +106,7 @@ export default function Feedback({
               </RadarChartHeader>
               <RadarChartContent data={data} />
             </RadarChart>
-            <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
               {data.map((item) => (
                 <RadialChart key={item.id}>
                   <RadialChartHeader>
@@ -126,9 +128,9 @@ export default function Feedback({
             </div>
           </div>
         )}
-        <div className="flex justify-end mt-5">
+        <div className="flex justify-center sm:justify-end mt-4 sm:mt-5">
           <Button
-            className="bg-blue-500 hover:bg-blue-600"
+            className="bg-blue-500 hover:bg-blue-600 w-full sm:w-auto"
             onClick={() => {window.location.href = returnPath ?? "/"}}
           >
             리터러시 완료
