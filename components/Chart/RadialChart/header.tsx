@@ -8,7 +8,7 @@ export function RadialChartHeader({
   return (
     <div
       className={cn(
-        "flex flex-col items-start gap-3.5",
+        "flex flex-col items-start gap-1.5 sm:gap-2 md:gap-3.5 w-full",
         className
       )}
       {...props}

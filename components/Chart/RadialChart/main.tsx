@@ -9,7 +9,7 @@ export function RadialChart({
     <div
       className={cn(
         "flex flex-col items-center",
-        "px-7 py-6",
+        "px-3 py-3 sm:px-5 sm:py-4 md:px-7 md:py-6",
         "rounded-[1.25rem] bg-white",
         className
       )}

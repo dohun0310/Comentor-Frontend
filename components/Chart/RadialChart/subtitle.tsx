@@ -9,7 +9,7 @@ export function RadialChartSubtitle({
   return (
     <span
       className={cn(
-        "text-sm font-medium",
+        "text-xs sm:text-sm font-medium",
         className
       )}
       style={{ color }}
