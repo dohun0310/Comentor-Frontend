@@ -1,34 +1,20 @@
-import svgPath from "./icons.json";
+export type { IconProps } from "./types";
 
-export function Icon({
-  name,
-  size = 24,
-  color = "currentColor",
-  ...props
-}: {
-  name: keyof typeof svgPath;
-  size?: number;
-  color?: string;
-} & React.SVGProps<SVGSVGElement>) {
-  const pathData = svgPath[name].paths;
-  const isStars = name === "stars";
-
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        d={pathData}
-        stroke={color}
-        strokeWidth={isStars ? 1.5 : 2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+export { FileIcon } from "./icons/FileIcon";
+export { TextIcon } from "./icons/TextIcon";
+export { VolumeIcon } from "./icons/VolumeIcon";
+export { ArrowCurveLeftUpIcon } from "./icons/ArrowCurveLeftUpIcon";
+export { ArrowCurveRightUpIcon } from "./icons/ArrowCurveRightUpIcon";
+export { ChevronDoubleLeftIcon } from "./icons/ChevronDoubleLeftIcon";
+export { ChevronDownIcon } from "./icons/ChevronDownIcon";
+export { CopyRightIcon } from "./icons/CopyRightIcon";
+export { StarsIcon } from "./icons/StarsIcon";
+export { XIcon } from "./icons/XIcon";
+export { MenuIcon } from "./icons/MenuIcon";
+export { HomeIcon } from "./icons/HomeIcon";
+export { ClockIcon } from "./icons/ClockIcon";
+export { ThumbUpIcon } from "./icons/ThumbUpIcon";
+export { ThumbDownIcon } from "./icons/ThumbDownIcon";
+export { TrashIcon } from "./icons/TrashIcon";
+export { DotsVerticalIcon } from "./icons/DotsVerticalIcon";
+export { CloseIcon } from "./icons/CloseIcon";
